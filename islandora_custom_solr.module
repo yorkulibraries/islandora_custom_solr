@@ -56,12 +56,6 @@ function islandora_custom_solr_theme($existing, $type, $theme, $path) {
       'file' => 'includes/newspaper.inc',
       'variables' => array('object' => NULL),
     ),
-    'islandora_custom_solr_book_book' => array(
-      'pattern' => 'islandora_custom_solr_book__',
-      'template' => 'theme/islandora-custom-solr-book-book',
-      'variables' => array('object' => NULL),
-      'file' => 'includes/book.inc',
-    ),
     'islandora_custom_solr_newspaper_issue' => array(
       'file' => 'includes/newspaper.inc',
       'template' => 'theme/islandora-custom-solr-newspaper-issue',
@@ -111,11 +105,6 @@ function islandora_custom_solr_module_implements_alter(&$implementations, $hook)
       unset($implementations['islandora_newspaper']);
     }
   }
-  elseif (strtolower($hook) == 'islandora_bookcmodel_islandora_view_object' && variable_get('islandora_custom_solr_replace_books', FALSE)) {
-    if (array_key_exists('islandora_book', $implementations)) {
-      unset($implementations['islandora_book']);
-    }
-  }
   elseif (strtolower($hook) == 'islandora_compoundcmodel_islandora_view_object' && variable_get('islandora_custom_solr_replace_compound', FALSE)) {
     if (array_key_exists('islandora_compound_object', $implementations)) {
       unset($implementations['islandora_compound_object']);
@@ -130,16 +119,6 @@ function islandora_custom_solr_islandora_newspapercmodel_islandora_view_object(A
   if (variable_get('islandora_custom_solr_replace_newspaper', FALSE)) {
     $output = theme('islandora_custom_solr_newspaper', array('object' => $newspaper));
     return array('islandora_custom_solr_newspaper' => $output);
-  }
-}
-
-/**
- * Implements hook_CMODEL_PID_islandora_view_object().
- */
-function islandora_custom_solr_islandora_bookcmodel_islandora_view_object($object) {
-  if (variable_get('islandora_custom_solr_replace_books', FALSE)) {
-    $output = theme('islandora_custom_solr_book_book', array('object' => $object));
-    return array('islandora_custom_solr_book_book' => $output);
   }
 }
 

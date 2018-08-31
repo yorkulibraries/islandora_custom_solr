@@ -14,10 +14,22 @@ function islandora_custom_solr_uninstall() {
     'islandora_custom_solr_newspaper_relationship',
     'islandora_custom_solr_newspaper_sequence_field',
     'islandora_custom_solr_newspaper_ajax',
-    'islandora_custom_solr_replace_books',
-    'islandora_custom_solr_book_relationship',
     'islandora_custom_solr_replace_compound',
     'islandora_custom_solr_compound_relationship',
   );
   array_walk($variables, 'variable_del');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Removes the book related fields.
+ */
+function islandora_custom_solr_update_7001(&$sandbox) {
+  $variables = array(
+    'islandora_custom_solr_replace_books',
+    'islandora_custom_solr_book_relationship',
+  );
+  array_walk($variables, 'variable_del');
+  return $t("Islandora Custom Solr database updates complete");
 }

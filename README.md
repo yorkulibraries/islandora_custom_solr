@@ -14,7 +14,6 @@ These modules are available for speed improvements, if you don't have one instal
 
 Affects:
 * islandora\_newspaper (for newspaper improvements)
-* islandora\_book (for book improvements)
 * islandora\_compound\_object (for compound improvements)
 
 
@@ -30,7 +29,7 @@ Enable/Disable the improvements you wish (assuming you have the modules installe
 
 Configure the correct Solr fields to use.
 
-**Note**: This module disrupts the normal processing of content models from islandora\_newspaper, islandora\_book and islandora\_compound solution packs.
+**Note**: This module disrupts the normal processing of content models from islandora\_newspaper and islandora\_compound solution packs.
 
 This means any theme templates or theme preprocess functions may need to be updated.
 

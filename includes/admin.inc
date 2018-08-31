@@ -25,12 +25,10 @@ function islandora_custom_solr_admin_settings_form(array $form, array &$form_sta
   // Need the module to do the replacement.
   $req_modules = array(
     'newspaper' => module_exists('islandora_newspaper'),
-    'book' => module_exists('islandora_book'),
     'compound' => module_exists('islandora_compound_object'),
   );
   $messages = array(
     'newspaper' => (!$req_modules['newspaper'] ? "Requires Islandora Newspaper Solution Pack." : ""),
-    'book' => (!$req_modules['book'] ? "Requires Islandora Book Solution Pack." : ""),
     'compound' => (!$req_modules['compound'] ? "Requires Islandora Compuond Object Solution Pack." : ""),
   );
 
@@ -116,40 +114,6 @@ function islandora_custom_solr_admin_settings_form(array $form, array &$form_sta
         ),
       ),
     ),
-    'books_wrapper' => array(
-      '#type' => 'fieldset',
-      '#title' => t('Books'),
-      'replace_books' => array(
-        '#type' => 'checkbox',
-        '#title' => t('Enable book replacements'),
-        '#disabled' => (!$req_modules['book']),
-        '#description' => t('Replaces book resource index queries with Solr ones. @msg',
-          array('@msg' => $messages['book'])),
-        '#default_value' => (!$req_modules['book'] ? FALSE : variable_get('islandora_custom_solr_replace_books', FALSE)),
-        '#return_value' => TRUE,
-      ),
-      'books_options' => array(
-        '#type' => 'container',
-        '#states' => array(
-          'visible' => array(
-            ':input[name="replace_books"]' => array('checked' => TRUE),
-          ),
-        ),
-        'book_relation_field' => array(
-          '#type' => 'textfield',
-          '#title' => t('Book relationship field'),
-          '#description' => t('Solr field that contains the relationship of pages to book.'),
-          '#size' => 100,
-          '#default_value' => variable_get('islandora_custom_solr_book_relationship', 'RELS_EXT_isMemberOf_uri_ms'),
-          '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
-          '#states' => array(
-            'required' => array(
-              ':input[name="replace_book"]' => array('checked' => TRUE),
-            ),
-          ),
-        ),
-      ),
-    ),
     'compound_wrapper' => array(
       '#type' => 'fieldset',
       '#title' => t('Compound Objects'),
@@ -214,10 +178,6 @@ function islandora_custom_solr_admin_settings_form_validate(array $form, array &
       $error['newspaper_sequence_field'] = t('Newspaper sequence field cannot be blank');
     }
   }
-  // Book fields.
-  if ($form_state['values']['replace_books'] && empty($form_state['values']['book_relation_field'])) {
-    $error['book_relation_field'] = t('Book relationship field is required.');
-  }
   // Compound fields.
   if ($form_state['values']['replace_compound'] == 1 && empty($form_state['values']['compound_relation_field'])) {
     $error['compound_relation_field'] = t('Compound relationship field is required.');
@@ -235,11 +195,9 @@ function islandora_custom_solr_admin_settings_form_validate(array $form, array &
  */
 function islandora_custom_solr_admin_settings_form_submit(array $form, array &$form_state) {
   variable_set('islandora_custom_solr_replace_newspaper', ($form_state['values']['replace_newspaper'] == 1));
-  variable_set('islandora_custom_solr_replace_books', ($form_state['values']['replace_books'] == 1));
   variable_set('islandora_custom_solr_replace_compound', ($form_state['values']['replace_compound'] == 1));
   variable_set('islandora_custom_solr_compound_relationship', $form_state['values']['compound_relation_field']);
   variable_set('islandora_custom_solr_newspaper_relationship', $form_state['values']['newspaper_relation_field']);
-  variable_set('islandora_custom_solr_book_relationship', $form_state['values']['book_relation_field']);
   variable_set('islandora_custom_solr_newspaper_issued_date', $form_state['values']['newspaper_date_field']);
   variable_set('islandora_custom_solr_newspaper_sequence_field', $form_state['values']['newspaper_sequence_field']);
   variable_set('islandora_custom_solr_newspaper_ajax', ($form_state['values']['newspaper_ajax_issues'] == 1));
